@@ -24,7 +24,7 @@ kısma kendi veri tabanı bilgilerinizi girebilirsiniz.
 Bu işlemleri gerçekleştirebilmek için post, put veya delete isteklerini kullanmanız gerekiyor
 Bu istekleri atabileceğiniz birçok araç mevcuttur verilecek örnekte ise Visual Studio Code eklentisi olan Thunder Client kullanılacaktır
 
-[image](https://github.com/Alidari/Student_Registration/assets/92364056/d6502c70-696d-466d-bd38-7a65a5634afe)
+![image](https://github.com/Alidari/Student_Registration/assets/92364056/d6502c70-696d-466d-bd38-7a65a5634afe)
 
 bu kısımdan bağlantı adresimizi ve göndereceğimiz istek türünü seçiyoruz. (Ekleme yapmak için; Post, Güncelleme yapmak için; Put, Silme işlemi için; Delete)
 
