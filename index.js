@@ -1,6 +1,8 @@
 const client = require("./database.js");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
+const fs = require("fs");
+const nodemailer = require("nodemailer")
 dotenv.config();
 const Express = require("express");
 const app = Express();
@@ -59,10 +61,11 @@ const update_counter =  async () => {
     const allStudents = await client.query("SELECT * FROM ogrenci");
     const counter = await client.query("Select * From ogrenci_sayac");
     const ogr_count = allStudents.rowCount
-
+ // Eğer counter değeri varsa ogrenci sayısı kadar guncelle
     if(counter.rowCount > 0){
         client.query("UPDATE public.ogrenci_sayac SET sayac="+ogr_count)
     }
+    // counter değeri yoksa ogrenci_sayac tablosuna ogrenci_sayısı kadar veri gir default = 0
     else{
         client.query("INSERT INTO ogrenci_sayac (sayac) VALUES ($1) RETURNING *",[ogr_count])
     }
@@ -112,7 +115,7 @@ app.post('/students', async (req, res) => {
         //Öğrenciyi ekleme işlemi
         else {
             const newStudent = await client.query("INSERT INTO ogrenci (id,name,email,dept_id) VALUES ($1,$2,$3,$4) RETURNING *", [id, name, email, dept_id]);
-            res.status(500).send(id + " numaralı öğrenci başarıyla eklenmiştir.")
+            res.status(200).send(id + " numaralı öğrenci başarıyla eklenmiştir.")
             res.json(newStudent.rows[0]);
             console.log(req.body);
             //Ogrenci sayacı güncelleniyor
@@ -124,6 +127,55 @@ app.post('/students', async (req, res) => {
         res.status(500).send("SERVER ERROR");
     }
 });
+
+// *******************************OGRENCİ YEDEKLEME İŞLEMLERİ*************************************
+
+const yedeklemeveemail = async function () {
+    try {
+        const sorgu = await client.query("SELECT * FROM ogrenci ");
+        const ogrenciler = sorgu.rows
+        const tarih = new Date()
+        const dosyaadi = `ogrenci_backup_${tarih.getFullYear()}-${tarih.getMonth()+1}-${tarih.getDate()}.json`;
+        fs.writeFileSync(dosyaadi, JSON.stringify(ogrenciler,null, 2))
+        const email = nodemailer.createTransport({
+            service: "hotmail", // gmail veya hotmail
+            auth : {
+                user : "", //mail bilgisi
+                pass : "" // sifre bilgisi
+            }
+        })
+        const mailOptions = {
+            from: "", // gonderen
+            to: "", // alıcı
+            subject:"Haftalık ogrenci yedekleme",
+            text : "ekte liste bulunur",
+            attachments : [
+                {
+                    filename: `ogrenci_backup_${tarih.getFullYear()}-${tarih.getMonth()+1}-${tarih.getDate()}.json`,
+                    path : `./ogrenci_backup_${tarih.getFullYear()}-${tarih.getMonth()+1}-${tarih.getDate()}.json`,
+                }
+            ]
+        }
+    
+        await email.sendMail(mailOptions);
+        console.log("gonderildi")
+    }
+    catch(err){
+        console.log("Hata olustu", err)
+    }
+
+    
+} 
+
+const zaman = parseInt(process.env.period) // env dosyasından sayı olarak alma
+
+if(!isNaN(process.env.period)){
+    setInterval(yedeklemeveemail, 1000 * 60 *  60 * 24* zaman) // günde bir tekrarla
+}
+else 
+{
+    console.log("Gecersiz periyot suresi")
+}
 
 //Öğrenci güncelleme işlemi
 app.put('/students', async (req, res) => {
@@ -140,7 +192,7 @@ app.put('/students', async (req, res) => {
     //Güncelleme işlemi
     else {
         const updateStudent = await client.query("UPDATE public.ogrenci SET name='" + name + "', email='" + email + "', dept_id=" + dept_id + " WHERE id=" + id)
-        res.status(500).send(id + " numaralı öğrenci bilgileri başarıyla güncellenmiştir.")
+        res.status(200).send(id + " numaralı öğrenci bilgileri başarıyla güncellenmiştir.")
         res.json(updateStudent.rows[0]);
         console.log(req.body)
     }
@@ -156,7 +208,7 @@ app.delete('/students', async (req, res) => {
         console.log(std_query)
         
         if(std_query.rowCount > 0){
-            res.status(500).send(id + " Numaralı öğrenciyi silme işlemi başarılı")
+            res.status(200).send(id + " Numaralı öğrenciyi silme işlemi başarılı")
             update_counter();
         }
         else{
@@ -198,7 +250,7 @@ app.post('/bolum', async (req, res) => {
         }
         else {
             const newDepart = await client.query("INSERT INTO bolum (id,name,std_id) VALUES ($1,$2,$3) RETURNING *", [id, name, std_id]);
-            res.status(500).send(id + " numaralı bölüm başarıyla eklenmiştir.")
+            res.status(200).send(id + " numaralı bölüm başarıyla eklenmiştir.")
             res.json(newDepart.rows[0]);
             console.log(req.body)
         }
@@ -220,7 +272,7 @@ app.put('/bolum', async (req, res) => {
     }
     else {
         const updateDepart = await client.query("UPDATE public.bolum SET name='" + name + "',std_id=" + std_id + "+ WHERE id=" + id)
-        res.status(500).send(id + " numaralı bolum bilgileri başarıyla güncellenmiştir.")
+        res.status(200).send(id + " numaralı bolum bilgileri başarıyla güncellenmiştir.")
         res.json(updateDepart.rows[0]);
         console.log(req.body)
     }
@@ -234,7 +286,7 @@ app.delete('/bolum', async (req, res) => {
         console.log(dept_query)
         
         if(dept_query.rowCount > 0){
-            res.status(500).send(id + " Numaralı bolum silme işlemi başarılı")
+            res.status(200).send(id + " Numaralı bolum silme işlemi başarılı")
         }
         else{
             res.status(500).send("Bu id numaralı bir bolum bulunamadı")
