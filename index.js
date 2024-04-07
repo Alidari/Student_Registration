@@ -34,7 +34,6 @@ const ogrTable = client.query(`CREATE TABLE IF NOT EXISTS public.ogrenci
     name character varying(20) COLLATE pg_catalog."default" NOT NULL,
     email character varying(50) COLLATE pg_catalog."default" NOT NULL,
     dept_id integer,
-    counter integer,
     CONSTRAINT "Ogrenci_pkey" PRIMARY KEY (id)
 )
 
@@ -43,6 +42,35 @@ TABLESPACE pg_default;
 ALTER TABLE IF EXISTS public.ogrenci
     OWNER to postgres;`)
 
+
+//Öğrenci sayaç tablosu oluşturma
+const ogr_counter = client.query(`CREATE TABLE IF NOT EXISTS public.ogrenci_sayac
+(
+    sayac integer
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.ogrenci_sayac
+    OWNER to postgres;`)
+
+
+const update_counter =  async () => {
+    const allStudents = await client.query("SELECT * FROM ogrenci");
+    const counter = await client.query("Select * From ogrenci_sayac");
+    const ogr_count = allStudents.rowCount
+
+    if(counter.rowCount > 0){
+        client.query("UPDATE public.ogrenci_sayac SET sayac="+ogr_count)
+    }
+    else{
+        client.query("INSERT INTO ogrenci_sayac (sayac) VALUES ($1) RETURNING *",[ogr_count])
+    }
+
+}
+
+update_counter()
+
 /*-------------------------------OGRENCI EKLEME GÜNCELLEME SİLME-----------------------------*/
 
 //Tüm öğrenci listesini güncelleme
@@ -50,6 +78,17 @@ app.get('/students', async (req, res) => {
     try {
         const allStudents = await client.query("SELECT * FROM ogrenci");
         res.json(allStudents.rows);
+    }
+    catch (e) {
+        console.log(e.message);
+        res.status(500).send('SERVER ERROR');
+    }
+});
+
+app.get('/counter', async (req, res) => {
+    try {
+        const counter = await client.query("SELECT * FROM ogrenci_sayac");
+        res.json(counter.rows);
     }
     catch (e) {
         console.log(e.message);
@@ -72,10 +111,12 @@ app.post('/students', async (req, res) => {
         }
         //Öğrenciyi ekleme işlemi
         else {
-            const newStudent = await client.query("INSERT INTO ogrenci (id,name,email,dept_id,counter) VALUES ($1,$2,$3,$4,$5) RETURNING *", [id, name, email, dept_id, counter]);
+            const newStudent = await client.query("INSERT INTO ogrenci (id,name,email,dept_id) VALUES ($1,$2,$3,$4) RETURNING *", [id, name, email, dept_id]);
             res.status(500).send(id + " numaralı öğrenci başarıyla eklenmiştir.")
             res.json(newStudent.rows[0]);
-            console.log(req.body)
+            console.log(req.body);
+            //Ogrenci sayacı güncelleniyor
+            update_counter();
         }
     }
     catch (e) {
@@ -116,6 +157,7 @@ app.delete('/students', async (req, res) => {
         
         if(std_query.rowCount > 0){
             res.status(500).send(id + " Numaralı öğrenciyi silme işlemi başarılı")
+            update_counter();
         }
         else{
             res.status(500).send("Bu id numaralı bir öğrenci bulunamadı")
