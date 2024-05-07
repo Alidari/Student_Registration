@@ -86,6 +86,31 @@ This module enables easy configuration and management of database operations.
 * When all operations are successfully completed, a success message is logged to the console.
 
 
+## [controller.js](./src/student/controller.js)
+
+This module contains functions to interact with the database, perform CRUD operations, and handle database-related errors.
+
+### Functions:
+##### Get All Records:
+* getStudents: Retrieves all student records from the database.
+* getDepartments: Retrieves all department records from the database.
+##### Get Record by ID:
+* getStudentById: Retrieves a specific student record by ID.
+* getDepartmentById: Retrieves a specific department record by ID.
+##### Add Record:
+* addStudent: Adds a new student record to the database.
+* addDepartment: Adds a new department record to the database.
+##### Remove Record:
+* removeStudent: Removes a student record from the database by ID.
+* removeDepartment: Removes a department record from the database by ID.
+##### Update Record:
+* updateStudent: Updates an existing student record in the database.
+* updateDepartment: Updates an existing department record in the database.
+##### Error Handling:
+* Error handling is implemented for each database operation to catch and handle any potential errors that may occur during execution.
+* If an error occurs during database operations, appropriate error messages are returned to the client.
+
+
 
 
 
