@@ -177,6 +177,11 @@ The Router module manages the interaction between the user and the database oper
 - **DELETE /student/:id**: Removes a specific student record from the database based on the provided ID.
 - **DELETE /department/:id**: Removes a specific department record from the database based on the provided ID.
 
+## [server.js](./server.js)
+This module serves as the entry point for the Express application. It sets up the server, configures routes for handling student-related requests, initializes the database, and starts the server to listen for incoming requests.
+
+## [db.js](./db.js)
+This module initializes a connection pool for PostgreSQL database operations using the `pg` library. It also loads environment variables from a `.env` file using the `dotenv` package.
 
 
 
