@@ -32,5 +32,17 @@ bu kısımdan bağlantı adresimizi ve göndereceğimiz istek türünü seçiyor
 
 ardından bu şekilde json formatında bilgileri gönderip veri tabanında güncellemelerde bulunabilirsiniz. 
 
+# Documentation
+1. Project Structure
+The project follows a modular structure for better organization and maintainability. Below is an overview of the main directories and their contents:
+
+[server.js](./server.js): Entry point of the application where the server is initialized and middleware are configured.
+[db.js](./db.js): Directory containing database-related files.
+[queries.js](./src/student/queries.js): Contains SQL queries used to interact with the database.
+[initializeDatabase.js](./src/student/initializeDatabase.js): Script to initialize the database and its schemas.
+[controller.js](./src/student/controller.js): Directory containing controller files for handling business logic.
+[routes.js](./src/student/routes.js): Directory containing route files for defining API endpoints.
+
+
 
 
