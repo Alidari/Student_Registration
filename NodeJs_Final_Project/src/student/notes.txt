@@ -1,0 +1,22 @@
+const createStudentTable = `
+    CREATE TABLE students (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255),
+        email VARCHAR(255),
+        age INT,
+        dob DATE,
+        department_id INT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (department_id) REFERENCES departments(id)
+    )
+`;
+
+const createDepartmentTable = `
+    CREATE TABLE departments (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+`;
