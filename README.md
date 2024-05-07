@@ -34,7 +34,7 @@ ardından bu şekilde json formatında bilgileri gönderip veri tabanında günc
 
 # Documentation
 
-1. Project Structure
+ #### Project Structure
    
 The project follows a modular structure for better organization and maintainability. Below is an overview of the main directories and their contents:
 
