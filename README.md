@@ -111,6 +111,55 @@ This module contains functions to interact with the database, perform CRUD opera
 * If an error occurs during database operations, appropriate error messages are returned to the client.
 
 
+## [queries.js](./src/student/queries.js)
+
+This module contains SQL queries used for database operations such as creating tables, inserting records, updating records, and defining triggers.
+
+### Queries:
+##### Check Existence Queries:
+* check_exists_table: Checks if a table exists in the database schema.
+* Check Email and Name Existence Queries:
+* checkEmailExists: Checks if an email already exists in the students table.
+* checkNameExists: Checks if a department name already exists in the departments table.
+
+##### Create Table Queries:
+* createStudentTable: Creates the students table with columns for id, name, email, and department_id.
+* createDepartmentTable: Creates the departments table with columns for id and name.
+
+##### Add New Column Queries:
+* addNumberStdColumnToDepartments: Adds the number_std column to the departments table.
+* addCreatedAtColumnToDepartments: Adds the created_at column to the departments table.
+* addCreatedAtColumnToStudents: Adds the created_at column to the students table.
+* addUpdatedAtColumnToDepartments: Adds the updated_at column to the departments table.
+* addUpdatedAtColumnToStudents: Adds the updated_at column to the students table.
+
+##### Create Student Counter Table Query:
+* createStudentCounterTable: Creates the student_counter table with a counter column.
+* Initialize Student Counter Table Query:
+* initializeStudentCounterTable: Initializes the student_counter table with an initial counter value.
+* Increment and Decrement Student Counter Trigger Queries:
+* incrementStudentCounterTriggerFunction: Creates or replaces the function to increment the counter in the student_counter table.
+* createIncrementStudentCounterTrigger: Creates the trigger to increment the counter when a new student is inserted.
+* decrementStudentCounterTriggerFunction: Creates or replaces the function to decrement the counter in the student_counter table.
+* createDecrementStudentCounterTrigger: Creates the trigger to decrement the counter when a student is deleted.
+
+##### Update Department Student Count Trigger Query:
+* updateDepartmentStudentCountFunction: Creates or replaces the function to update the number_std column in the departments table when a new student is inserted.
+* createIncrementDepartmentStudentCountTrigger: Creates the trigger to execute the updateDepartmentStudentCountFunction after inserting a new student.
+
+##### Set Created At and Updated At Triggers and Functions Queries:
+* createSetCreatedAtFunction: Creates or replaces the function to set the created_at timestamp for new records.
+* createSetCreatedAtTriggerForStudents: Creates the trigger to set the created_at timestamp for new student records.
+* createSetCreatedAtTriggerForDepartments: Creates the trigger to set the created_at timestamp for new department records.
+* createSetUpdatedAtFunctionForStudents: Creates or replaces the function to set the updated_at timestamp for updated student records.
+* createSetUpdatedAtTriggerForStudents: Creates the trigger to set the updated_at timestamp for updated student records.
+* createSetUpdatedAtFunctionForDepartments: Creates or replaces the function to set the updated_at timestamp for updated department records.
+* createSetUpdatedAtTriggerForDepartments: Creates the trigger to set the updated_at timestamp for updated department records.
+
+##### Other CRUD Queries:
+* Includes queries for getting all students and departments, getting records by ID, adding, removing, and updating student and department records.s
+
+
 
 
 
