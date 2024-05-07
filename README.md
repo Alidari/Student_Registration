@@ -52,5 +52,40 @@ The project follows a modular structure for better organization and maintainabil
 
 
 
+## [initializeDatabase.js](./src/student/initializeDatabase.js)
+These codes are independent modules that perform database creation and configuration operations. 
+Each function performs a specific task, and appropriate messages are logged to the console when the operations are successfully executed. 
+This module enables easy configuration and management of database operations.
+
+### Database Creation and Table Creation:
+
+* Functions like createStudentTable, createDepartmentTable, and createStudentCounterTable are responsible for creating tables for students, departments, and student counters, respectively.
+* Each table checks if it already exists by first verifying if a table exists with the given name using a query from the queries module.
+* If the table does not exist, it is created using SQL queries from the queries module.
+* After creating the table, relevant messages are logged to the console indicating the success of the operation.
+
+### Column Additions:
+* Functions such as addNumberStdColumnToDepartments, addCreatedAtColumnToDepartments, addCreatedAtColumnToStudents, addUpdatedAtColumnToDepartments, and addUpdatedAtColumnToStudents are responsible for adding extra columns to the tables.
+* For example, the departments table is augmented with columns such as number_std, created_at, and updated_at.
+* Columns are not re-added if they already exist, and relevant messages are logged to the console.
+* Additionally, triggers and functions are created after each column addition.
+
+### Creation of Triggers and Functions:
+* Functions like updateDepartmentStudentCountFunction, createIncrementDepartmentStudentCountTrigger, incrementStudentCounterTriggerFunction, createIncrementStudentCounterTrigger, decrementStudentCounterTriggerFunction, and createDecrementStudentCounterTrigger are responsible for creating.
+* PostgreSQL triggers and functions.
+* These triggers and functions handle updating data in database tables and taking actions regarding changes.
+
+### Weekly Backup Function:
+* The weeklyBackupTrigger function performs weekly backup operations.
+* When a certain period (weekly interval) has passed, the weekly backup operations are triggered.
+* Weekly backup operations consist of writing the student list to a JSON file using the writeStudentsToJSON function and sending this file as an email attachment using the sendEmailWithBackup function.
+
+### Database Initialization Function:
+* The initializeDatabase function initiates all database operations.
+* These operations include table creation, column additions, trigger creation, and starting the weekly backup trigger.
+* When all operations are successfully completed, a success message is logged to the console.
+
+
+
 
 
