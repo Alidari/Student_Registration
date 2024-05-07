@@ -162,4 +162,23 @@ This module contains SQL queries used for database operations such as creating t
 
 
 
+## [routes.js](./src/student/routes.js)
+
+The Router module manages the interaction between the user and the database operations through HTTP requests. It defines routes that map HTTP requests to specific controller functions for handling various CRUD operations on the database.
+
+- **GET /student**: Retrieves all student records from the database.
+- **GET /department**: Retrieves all department records from the database.
+- **POST /student**: Adds a new student record to the database.
+- **POST /department**: Adds a new department record to the database.
+- **GET /student/:id**: Retrieves a specific student record from the database based on the provided ID.
+- **GET /department/:id**: Retrieves a specific department record from the database based on the provided ID.
+- **PUT /student/:id**: Updates an existing student record in the database based on the provided ID.
+- **PUT /department/:id**: Updates an existing department record in the database based on the provided ID.
+- **DELETE /student/:id**: Removes a specific student record from the database based on the provided ID.
+- **DELETE /department/:id**: Removes a specific department record from the database based on the provided ID.
+
+
+
+
+
 
